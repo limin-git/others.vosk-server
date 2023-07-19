@@ -4,19 +4,26 @@ var processor;
 var streamLocal;
 var webSocket;
 var inputArea;
+var partialArea;
 const bufferSize = 8192;
 const sampleRate = 8000;
-const wsURL = 'ws://localhost:2700';
+const wsURL = 'ws://172.25.6.69:2700';
 var initComplete = false;
+var text = "";
 
 (function () {
     document.addEventListener('DOMContentLoaded', (event) => {
         inputArea = document.getElementById('q');
+        partialArea = document.getElementById('q2');
 
         const listenButton = document.getElementById('listenWithScript');
         const stopListeningButton = document.getElementById('stopListeningWithScript');
 
         listenButton.addEventListener('mousedown', function () {
+
+            console.log("limin: listenButton.addEventListener mousedown")
+
+
             listenButton.disabled = true;
 
             initWS();
@@ -32,7 +39,7 @@ var initComplete = false;
             initComplete = true;
         });
 
-        stopListeningButton.addEventListener('mouseup', function () {
+        stopListeningButton.addEventListener('mouseup', function (event) {
             if (initComplete === true) {
 
                 webSocket.send('{"eof" : 1}');
@@ -49,6 +56,8 @@ var initComplete = false;
                 inputArea.innerText = ""
             }
         });
+
+        console.log("limin: DOMContentLoaded")
     });
 }())
 
@@ -81,6 +90,8 @@ function sendAudio(audioDataChunk) {
 }
 
 function initWS() {
+    console.log('limin: initWS');
+
     webSocket = new WebSocket(wsURL);
     webSocket.binaryType = "arraybuffer";
 
@@ -93,10 +104,25 @@ function initWS() {
     };
 
     webSocket.onmessage = function (event) {
+
+        console.log(event.data);
+
         if (event.data) {
+
             let parsed = JSON.parse(event.data);
-            if (parsed.result) console.log(parsed.result);
-            if (parsed.text) inputArea.innerText = parsed.text;
+            // if (parsed.result) console.log(parsed.result);
+            // if (parsed.text) inputArea.innerText = parsed.text;
+
+            if (parsed.partial)
+            {
+                // inputArea.innerText = parsed.partial;
+                partialArea.innerText = parsed.partial;
+            }
+            else if (parsed.text)
+            {
+                text += (parsed.text + " ");
+                inputArea.innerText = text;
+            }
         }
     };
 }
