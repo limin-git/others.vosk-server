@@ -7,7 +7,7 @@ var inputArea;
 var partialArea;
 const bufferSize = 8192;
 const sampleRate = 8000;
-const wsURL = 'ws://172.25.6.69:2700';
+const wsURL = 'ws://172.29.65.102:2700';
 var initComplete = false;
 var text = "";
 
