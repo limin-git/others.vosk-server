@@ -18,6 +18,10 @@ var text = "";
         const listenButton = document.getElementById('listen');
         const stopListeningButton = document.getElementById('stopListening');
 
+        setInterval(function () {
+            inputArea.scrollTop = inputArea.scrollHeight;
+        }, 100);
+
         listenButton.addEventListener('mousedown', function () {
             listenButton.disabled = true;
             inputArea.innerText = "";
