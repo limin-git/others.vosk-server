@@ -127,12 +127,11 @@ function initWebSocket() {
             // if (parsed.text) inputArea.innerText = parsed.text;
 
             if (parsed.partial) {
-                // inputArea.innerText = parsed.partial;
                 partialArea.innerText = parsed.partial;
             }
             else if (parsed.text) {
-                text += (parsed.text + " ");
-                inputArea.innerText = text;
+                text += (parsed.text + "\n");
+                inputArea.innerHTML = text;
             }
         }
     };
